@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>দোকানের খাতা</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===== LOGIN SCREEN ===== -->
+<section id="login-screen" class="screen">
+  <div class="login-wrap">
+    <h1 class="brand">দোকানের খাতা</h1>
+    <p class="brand-sub">চা ও সিগারেট দোকানের আয়-ব্যয়ের হিসাব</p>
+
+    <form id="login-form" class="login-card">
+      <label for="login-email">ইমেইল</label>
+      <input type="email" id="login-email" required autocomplete="username">
+
+      <label for="login-pass">পাসওয়ার্ড</label>
+      <input type="password" id="login-pass" required autocomplete="current-password">
+
+      <button type="submit" class="btn-primary">প্রবেশ করুন</button>
+      <p id="login-error" class="error-text" hidden></p>
+    </form>
+    <p class="login-note">এই খাতা শুধু দোকানের মালিকের জন্য। অ্যাকাউন্ট Firebase কনসোল থেকে তৈরি করা হয়েছে।</p>
+  </div>
+</section>
+
+<!-- ===== APP SHELL ===== -->
+<section id="app-screen" class="screen" hidden>
+
+  <header class="app-header">
+    <div>
+      <h1 class="app-title">দোকানের খাতা</h1>
+      <p id="header-date" class="app-date"></p>
+    </div>
+    <button id="logout-btn" class="icon-btn" title="বের হন" aria-label="বের হন">⏻</button>
+  </header>
+
+  <main class="app-main">
+
+    <!-- ---- DASHBOARD ---- -->
+    <div id="view-dashboard" class="view">
+
+      <div class="ledger-card summary-card">
+        <p class="ledger-tab">আজকের হিসাব</p>
+        <div class="summary-row">
+          <div class="summary-item">
+            <span class="summary-label">আয়</span>
+            <span id="today-income" class="summary-value income">৳০</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">খরচ</span>
+            <span id="today-expense" class="summary-value expense">৳০</span>
+          </div>
+        </div>
+        <div class="divider-rule"></div>
+        <div class="profit-row">
+          <span class="summary-label">আজকের লাভ</span>
+          <span id="today-profit" class="profit-value">৳০</span>
+        </div>
+      </div>
+
+      <div class="ledger-card">
+        <p class="ledger-tab">এই মাসের হিসাব</p>
+        <div class="summary-row">
+          <div class="summary-item">
+            <span class="summary-label">মোট আয়</span>
+            <span id="month-income" class="summary-value income">৳০</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">মোট খরচ</span>
+            <span id="month-expense" class="summary-value expense">৳০</span>
+          </div>
+        </div>
+        <div class="divider-rule"></div>
+        <div class="profit-row">
+          <span class="summary-label">মাসের লাভ</span>
+          <span id="month-profit" class="profit-value">৳০</span>
+        </div>
+      </div>
+
+      <div class="ledger-card">
+        <p class="ledger-tab">বিভাগ অনুযায়ী বিক্রি (এই মাস)</p>
+        <div id="category-bars" class="bars-wrap">
+          <!-- bars injected by JS -->
+        </div>
+      </div>
+
+      <div class="ledger-card">
+        <div class="card-head-row">
+          <p class="ledger-tab">সাম্প্রতিক এন্ট্রি</p>
+          <button class="link-btn" data-nav="view-history">সব দেখুন</button>
+        </div>
+        <div id="recent-list" class="entry-list"></div>
+      </div>
+
+    </div>
+
+    <!-- ---- ADD ENTRY ---- -->
+    <div id="view-add" class="view" hidden>
+      <form id="entry-form" class="ledger-card">
+        <p class="ledger-tab">নতুন এন্ট্রি</p>
+
+        <div class="type-switch" role="tablist">
+          <button type="button" class="type-btn active" data-type="income" role="tab">আয়</button>
+          <button type="button" class="type-btn" data-type="expense" role="tab">খরচ</button>
+        </div>
+
+        <label for="entry-category">বিভাগ</label>
+        <select id="entry-category" required></select>
+
+        <label for="entry-amount">পরিমাণ (টাকা)</label>
+        <input type="number" id="entry-amount" inputmode="decimal" min="0" step="0.01" required placeholder="০">
+
+        <label for="entry-date">তারিখ</label>
+        <input type="date" id="entry-date" required>
+
+        <label for="entry-note">নোট (ঐচ্ছিক)</label>
+        <input type="text" id="entry-note" placeholder="যেমন: বাকি বিক্রি, বিশেষ খরচ...">
+
+        <button type="submit" class="btn-primary" id="entry-submit-btn">সংরক্ষণ করুন</button>
+        <button type="button" class="btn-cancel-edit" id="cancel-edit-btn" hidden>বাতিল করুন</button>
+        <button type="button" class="btn-danger" id="delete-entry-btn" hidden style="width:100%; margin-top:10px;">এন্ট্রি মুছে ফেলুন</button>
+        <p id="entry-msg" class="success-text" hidden></p>
+      </form>
+    </div>
+
+    <!-- ---- HISTORY ---- -->
+    <div id="view-history" class="view" hidden>
+      <div class="ledger-card">
+        <p class="ledger-tab">সব এন্ট্রি</p>
+        <div class="filter-row">
+          <select id="filter-month"></select>
+          <select id="filter-type">
+            <option value="all">সব</option>
+            <option value="income">শুধু আয়</option>
+            <option value="expense">শুধু খরচ</option>
+          </select>
+        </div>
+        <div id="history-list" class="entry-list"></div>
+        <p id="history-empty" class="muted-text" hidden>কোনো এন্ট্রি পাওয়া যায়নি।</p>
+      </div>
+    </div>
+
+  </main>
+
+  <nav class="tab-bar">
+    <button class="tab-btn active" data-nav="view-dashboard">
+      <span class="tab-icon">🏠</span><span>হোম</span>
+    </button>
+    <button class="tab-btn" data-nav="view-add">
+      <span class="tab-icon">✎</span><span>নতুন এন্ট্রি</span>
+    </button>
+    <button class="tab-btn" data-nav="view-history">
+      <span class="tab-icon">📖</span><span>হিসাব খাতা</span>
+    </button>
+  </nav>
+
+</section>
+
+<!-- ===== EDIT/DELETE CONFIRM MODAL ===== -->
+<div id="confirm-modal" class="modal" hidden>
+  <div class="modal-card">
+    <p id="confirm-text">এই এন্ট্রিটি মুছে ফেলতে চান?</p>
+    <div class="modal-actions">
+      <button id="confirm-cancel" class="btn-cancel-edit">না</button>
+      <button id="confirm-ok" class="btn-danger">হ্যাঁ, মুছুন</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

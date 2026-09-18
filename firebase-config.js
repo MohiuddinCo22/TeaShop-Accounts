@@ -1,0 +1,11 @@
+// Firebase কনসোল থেকে আপনার প্রজেক্টের কনফিগ কপি করে নিচে বসান।
+// Firebase কনসোল > Project settings > General > Your apps > SDK setup and configuration
+
+export const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
