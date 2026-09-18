@@ -36,14 +36,17 @@ button, input, select {
 .screen { min-height: 100vh; }
 
 /* ===== LOGIN ===== */
-#login-screen {
+#login-screen:not([hidden]) {
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--maroon);
   padding: 24px;
 }
-
+#login-screen[hidden],
+#app-screen[hidden] {
+  display: none;
+}
 .login-wrap {
   width: 100%;
   max-width: 380px;
