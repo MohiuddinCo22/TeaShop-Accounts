@@ -2,10 +2,10 @@
 // Firebase কনসোল > Project settings > General > Your apps > SDK setup and configuration
 
 export const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyA-3mcumfpRlQEG_75g0Zuk8BNwpmGO_Q0",
+  authDomain: "tea-shop-913a8.firebaseapp.com",
+  projectId: "tea-shop-913a8",
+  storageBucket: "tea-shop-913a8.firebasestorage.app",
+  messagingSenderId: "422350912829",
+  appId: "1:422350912829:web:be0c6f44e983314f505954"
 };
